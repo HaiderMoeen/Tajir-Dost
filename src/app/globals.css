@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+body {
+  /* We will override default styles in layout, but this ensures a clean slate */
+}
