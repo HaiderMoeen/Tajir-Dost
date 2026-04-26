@@ -20,7 +20,6 @@ export default function TourGuide() {
     {
       target: ".tour-hisaab-btn",
       content: language === "en" ? "Yahan se aap rozana ki kamai aur kharchay ka hisaab asani se rakh sakte hain." : "یہاں سے آپ روزانہ کی کمائی اور خرچوں کا حساب آسانی سے رکھ سکتے ہیں۔",
-      disableBeacon: true,
     },
     {
       target: ".tour-udhar-card",
