@@ -6,7 +6,7 @@ import { useAppContext } from "@/context/AppContext";
 import toast from "react-hot-toast";
 
 export default function UdharPage() {
-  const { udharList, markUdharPaid, addUdhar, language } = useAppContext();
+  const { udharList, markUdharPaid, addUdhar, language, profile } = useAppContext();
   const [showModal, setShowModal] = useState(false);
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
@@ -32,14 +32,12 @@ export default function UdharPage() {
     amount: language === "en" ? "Amount (Rs)" : "Raqam (Rs)",
     save: language === "en" ? "Save Udhar" : "Mahfooz Karein",
     cancel: language === "en" ? "Cancel" : "Wapis",
-    message: (name: string, amount: number) => language === "en" 
-      ? `Assalam-o-Alaikum ${name}, aap ka Bismillah Store par Rs. ${amount} ka udhar pending hai. Barae meherbani jald clear kar dein.`
-      : `Assalam-o-Alaikum ${name}, aap ka Bismillah Store par Rs. ${amount} ka udhar pending hai. Barae meherbani jald clear kar dein.`
+    message: (name: string, amount: number) => 
+      `Assalam-o-Alaikum ${name}, aap ka ${profile.storeName} par Rs. ${amount} ka udhaar baqi hai. Barae meherbani jald clear kar dein. Aap humein ${profile.bankName} (${profile.accountNumber}) par bhi transfer kar sakte hain.`
   };
 
   const handleSendReminder = (name: string, phone: string, amount: number) => {
     const text = encodeURIComponent(t.message(name, amount));
-    // For MVP, we assume the phone is in Pakistan format starting with 0, convert to 92
     const formattedPhone = phone.startsWith("0") ? "92" + phone.slice(1) : phone;
     window.open(`https://wa.me/${formattedPhone}?text=${text}`, "_blank");
   };
@@ -63,18 +61,21 @@ export default function UdharPage() {
   };
 
   return (
-    <main className="flex-1 bg-white min-h-screen flex flex-col relative pb-20 md:pb-6">
+    <main className="flex-1 bg-[#f0fbf9] min-h-screen flex flex-col relative pb-20 md:pb-6">
       <div className="w-full max-w-5xl mx-auto flex flex-col min-h-screen">
-      <div className="pt-6 px-6 pb-6 bg-yellow-400 text-white rounded-b-3xl shadow-md flex justify-between items-center mb-6">
+      <div className="pt-6 px-6 pb-6 bg-gradient-to-r from-yellow-500 to-orange-600 text-white rounded-b-3xl shadow-md flex justify-between items-center mb-6">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold drop-shadow-md">Udhaar</h1>
             <h1 className="text-3xl font-bold drop-shadow-md" style={{ fontFamily: 'var(--font-urdu)' }}>(ادھار)</h1>
           </div>
         </div>
-        <button onClick={() => setShowModal(true)} className="bg-white text-yellow-600 px-4 py-2 rounded-2xl shadow-md active:scale-95 transition-all flex items-center gap-2">
-          <span className="font-bold text-sm">+ {t.addNew}</span>
-          <span className="font-bold text-xl" style={{ fontFamily: 'var(--font-urdu)' }}>(نیا ادھار)</span>
+        <button onClick={() => setShowModal(true)} className="bg-white text-orange-600 px-4 py-2 rounded-2xl shadow-md active:scale-95 transition-all flex items-center gap-2">
+          <span className="font-bold text-sm hidden md:block">+ {t.addNew}</span>
+          <span className="font-bold text-lg md:text-xl" style={{ fontFamily: 'var(--font-urdu)' }}>
+            <span className="md:hidden">نیا ادھار</span>
+            <span className="hidden md:inline">(نیا ادھار)</span>
+          </span>
         </button>
       </div>
 
@@ -86,7 +87,7 @@ export default function UdharPage() {
       ) : (
         <div className="p-4 md:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {udharList.map((item) => (
-            <div key={item.id} className="bg-yellow-400 hover:bg-yellow-500 shadow-lg shadow-yellow-400/40 rounded-3xl p-5 flex flex-col justify-between min-h-[160px] transition-all">
+            <div key={item.id} className="bg-gradient-to-br from-yellow-500 to-orange-600 shadow-lg shadow-orange-500/20 rounded-3xl p-5 flex flex-col justify-between min-h-[160px] transition-all group hover:scale-[1.02]">
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-xl font-bold text-white drop-shadow-md leading-tight">{item.name}</h3>
@@ -114,7 +115,7 @@ export default function UdharPage() {
                     markUdharPaid(item.id);
                     toast.success(language === "en" ? "Udhar cleared" : "Udhar wasool ho gaya");
                   }}
-                  className="flex-1 bg-white text-yellow-600 hover:bg-yellow-50 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-sm"
+                  className="flex-1 bg-white text-orange-600 hover:bg-orange-50 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-sm"
                 >
                   <CheckCircle2 size={18} />
                   {t.markPaid}
@@ -188,11 +189,11 @@ export default function UdharPage() {
                   {t.cancel}
                 </button>
                 <button
-                  type="submit"
-                  className="flex-1 py-3 px-4 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-600/20"
-                >
-                  {t.save}
-                </button>
+              type="submit"
+              className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-600 text-white font-bold text-lg rounded-2xl shadow-lg active:scale-95 transition-all mt-4"
+            >
+              {t.save}
+            </button>
               </div>
             </form>
           </div>

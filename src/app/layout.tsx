@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} ${notoNastaliq.variable} bg-gray-50 flex min-h-screen text-slate-900`}>
+      <body className={`${inter.className} ${notoNastaliq.variable} bg-[#f0fbf9] flex min-h-screen text-slate-900`}>
         <AppProvider>
           {/* Desktop Side Navigation */}
           <SideNav />
