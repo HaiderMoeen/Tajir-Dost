@@ -45,15 +45,15 @@ export default function TourGuide() {
       steps={steps}
       run={run}
       continuous
-      showProgress
-      showSkipButton
       onEvent={handleJoyrideCallback}
-      disableScrolling
-      disableOverlayClose
-      skipBeacon={true}
       options={{
         primaryColor: "#1abc9c",
         zIndex: 1000,
+        showProgress: true,
+        skipScroll: true,
+        buttons: ['back', 'close', 'primary', 'skip'],
+        skipBeacon: true,
+        overlayClickAction: false,
       }}
       locale={{
         last: language === "en" ? "Done" : "Khatam",
