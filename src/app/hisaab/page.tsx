@@ -2,14 +2,17 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, ArrowLeft, CheckCircle2, DollarSign, Receipt, ListTodo } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle2, DollarSign, Receipt, ListTodo, CalendarDays, TrendingUp, TrendingDown } from "lucide-react";
 import { useAppContext } from "@/context/AppContext";
 import toast from "react-hot-toast";
 
 export default function HisaabPage() {
   const router = useRouter();
-  const { setEarnings, setExpenses, earnings, expenses, language } = useAppContext();
+  const { setEarnings, setExpenses, earnings, expenses, language, hisaabLedger, updateHisaab } = useAppContext();
   
+  const [view, setView] = useState<'ledger' | 'wizard'>('ledger');
+  const [selectedHisaabId, setSelectedHisaabId] = useState<string | null>(null);
+
   const [step, setStep] = useState(1);
   const [newEarnings, setNewEarnings] = useState(earnings.toString());
   const [newExpenses, setNewExpenses] = useState(expenses.toString());
@@ -29,14 +32,39 @@ export default function HisaabPage() {
     inventoryCheck: language === "en" ? "Did you check items that need restocking?" : "Kiya aapne khatam hone wala samaan check kiya?",
   };
 
+  const openWizard = (id: string | null = null) => {
+    if (id) {
+      const record = hisaabLedger.find(h => h.id === id);
+      if (record) {
+        setNewEarnings(record.earnings.toString());
+        setNewExpenses(record.expenses.toString());
+        setSelectedHisaabId(id);
+      }
+    } else {
+      setNewEarnings(earnings.toString());
+      setNewExpenses(expenses.toString());
+      setSelectedHisaabId(null);
+    }
+    setStep(1);
+    setItemsChecked(false);
+    setView('wizard');
+  };
+
   const handleNext = () => setStep((s) => s + 1);
   const handleBack = () => setStep((s) => s - 1);
 
   const handleSave = () => {
-    setEarnings(parseInt(newEarnings) || 0);
-    setExpenses(parseInt(newExpenses) || 0);
+    const e = parseInt(newEarnings) || 0;
+    const ex = parseInt(newExpenses) || 0;
+
+    if (selectedHisaabId) {
+      updateHisaab(selectedHisaabId, e, ex);
+    } else {
+      setEarnings(e);
+      setExpenses(ex);
+    }
     toast.success(t.success);
-    router.push("/");
+    setView('ledger');
   };
 
   const formatCurrency = (amount: number) => {
@@ -44,10 +72,53 @@ export default function HisaabPage() {
   };
 
   return (
-    <main className="flex-1 bg-emerald-50 min-h-screen flex flex-col relative pb-20">
-      <div className="w-full max-w-3xl mx-auto flex flex-col min-h-screen">
-      {/* Progress Header */}
-      <div className="pt-6 px-4 pb-4 bg-emerald-600 text-white rounded-b-3xl shadow-md">
+    <main className="flex-1 bg-white min-h-screen flex flex-col relative pb-20 md:pb-6">
+      <div className="w-full max-w-5xl mx-auto flex flex-col min-h-screen">
+      
+      {view === 'ledger' ? (
+        <div className="flex-1 flex flex-col animate-in fade-in duration-300">
+          <div className="pt-6 px-6 pb-6 bg-emerald-600 text-white rounded-b-3xl shadow-md flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold">{t.title}</h1>
+              <p className="text-emerald-100 text-sm font-medium mt-1">Past 30 Days History</p>
+            </div>
+            <button onClick={() => openWizard(null)} className="bg-white text-emerald-700 px-4 py-3 rounded-2xl font-bold text-sm shadow-md active:scale-95 transition-all">
+              + New Today
+            </button>
+          </div>
+
+          <div className="p-4 md:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {hisaabLedger.map((record) => {
+              const net = record.earnings - record.expenses;
+              const isProfit = net >= 0;
+
+              return (
+                <button 
+                  key={record.id} 
+                  onClick={() => openWizard(record.id)}
+                  className={`p-5 rounded-3xl shadow-lg border-none flex flex-col justify-between min-h-[130px] active:scale-[0.98] transition-all text-left ${isProfit ? 'bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-600 hover:to-emerald-800 shadow-emerald-600/30' : 'bg-gradient-to-r from-rose-500 to-rose-700 hover:from-rose-600 hover:to-rose-800 shadow-rose-600/30'}`}
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <div className={`flex items-center gap-2 ${isProfit ? 'text-emerald-50' : 'text-rose-50'}`}>
+                      <CalendarDays size={18} />
+                      <span className="font-semibold">{new Date(record.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                    </div>
+                    {isProfit ? <TrendingUp size={20} className="text-emerald-100" /> : <TrendingDown size={20} className="text-rose-100" />}
+                  </div>
+                  
+                  <div>
+                    <p className={`text-sm font-bold ${isProfit ? 'text-emerald-200' : 'text-rose-200'}`}>Net {isProfit ? 'Profit' : 'Loss'}</p>
+                    <p className="text-2xl font-black text-white">{formatCurrency(Math.abs(net))}</p>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Progress Header */}
+          <div className="pt-6 px-4 pb-4 bg-emerald-600 text-white rounded-b-3xl shadow-md">
         <h1 className="text-2xl font-bold text-center mb-6">{t.title}</h1>
         <div className="flex justify-between items-center px-6 relative">
           <div className="absolute left-10 right-10 top-1/2 h-1 bg-emerald-700 -z-10 -translate-y-1/2"></div>
@@ -152,7 +223,15 @@ export default function HisaabPage() {
 
       {/* Navigation Footer */}
       <div className="p-6 flex gap-4">
-        {step > 1 && (
+        {step === 1 ? (
+          <button
+            onClick={() => setView('ledger')}
+            className="flex-1 py-4 bg-emerald-100 text-emerald-800 font-bold rounded-2xl flex justify-center items-center gap-2 active:bg-emerald-200"
+          >
+            <ArrowLeft size={20} />
+            Cancel
+          </button>
+        ) : (
           <button
             onClick={handleBack}
             className="flex-1 py-4 bg-emerald-100 text-emerald-800 font-bold rounded-2xl flex justify-center items-center gap-2 active:bg-emerald-200"
@@ -180,6 +259,8 @@ export default function HisaabPage() {
           </button>
         )}
       </div>
+      </>
+      )}
       </div>
     </main>
   );

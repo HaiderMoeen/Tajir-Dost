@@ -36,12 +36,16 @@ export default function SettingsPage() {
   };
 
   return (
-    <main className="flex-1 overflow-y-auto bg-gray-50 p-4 pb-24 md:p-8">
-      <div className="max-w-3xl mx-auto">
-      <header className="mb-6 pt-2">
-        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-      </header>
-
+    <main className="flex-1 bg-white min-h-screen flex flex-col relative pb-20 md:pb-6">
+      <div className="w-full max-w-5xl mx-auto flex flex-col min-h-screen">
+      <div className="pt-6 px-6 pb-6 bg-slate-800 text-white rounded-b-3xl shadow-md flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold">{t.title}</h1>
+          <p className="text-slate-300 text-sm font-medium mt-1">App Configuration</p>
+        </div>
+      </div>
+      
+      <div className="p-4 md:p-6 flex-1">
       {/* Profile Section */}
       <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-6 flex items-center gap-4">
         <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
@@ -118,10 +122,11 @@ export default function SettingsPage() {
       </section>
 
       {/* Logout */}
-      <button className="w-full flex items-center justify-center gap-2 py-4 bg-white text-rose-600 font-bold rounded-2xl shadow-sm border border-rose-100 hover:bg-rose-50 transition-colors">
+      <button className="w-full flex items-center justify-center gap-2 py-4 bg-white text-rose-600 font-bold rounded-2xl shadow-sm border border-rose-100 hover:bg-rose-50 transition-colors mt-4">
         <LogOut size={20} />
         {t.logout}
       </button>
+      </div>
       </div>
     </main>
   );

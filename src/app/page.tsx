@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { PlusCircle, ShoppingCart, TrendingUp, Banknote, Store } from "lucide-react";
+import { PlusCircle, ShoppingCart, TrendingUp, Banknote, Store, User } from "lucide-react";
 import { useAppContext } from "@/context/AppContext";
 import toast from "react-hot-toast";
 import TourGuide from "@/components/TourGuide";
@@ -54,16 +54,22 @@ export default function Home() {
   };
 
   return (
-    <main className="flex-1 overflow-y-auto bg-gray-50 p-4 pb-24 md:p-8">
-      <div className="max-w-5xl mx-auto">
+    <main className="flex-1 bg-white min-h-screen flex flex-col relative pb-20 md:pb-6">
+      <div className="w-full max-w-5xl mx-auto flex flex-col min-h-screen">
       <TourGuide />
 
-      {/* Header */}
-      <header className="mb-8 mt-2">
-        <h1 className="text-2xl font-bold text-gray-900">{t.store}</h1>
-        <p className="text-gray-500 mt-1">{t.greeting}</p>
-      </header>
+      {/* Header Banner */}
+      <div className="pt-6 px-6 pb-6 bg-emerald-600 text-white rounded-b-3xl shadow-md flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold drop-shadow-md">{t.store}</h1>
+          <p className="text-emerald-100 font-medium mt-1 drop-shadow-md">{t.greeting}</p>
+        </div>
+        <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm shadow-sm border border-white/30 shrink-0">
+          <User size={24} className="text-white drop-shadow-sm" />
+        </div>
+      </div>
 
+      <div className="p-4 md:p-6 flex-1">
       {/* Consolidated Top Grid: Hisaab CTA, Munafa, Udhar */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
         
@@ -160,6 +166,7 @@ export default function Home() {
           </div>
         </section>
       )}
+      </div>
       </div>
     </main>
   );
