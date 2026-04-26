@@ -20,7 +20,7 @@ export default function TourGuide() {
     {
       target: ".tour-hisaab-btn",
       content: language === "en" ? "Yahan se aap rozana ki kamai aur kharchay ka hisaab asani se rakh sakte hain." : "یہاں سے آپ روزانہ کی کمائی اور خرچوں کا حساب آسانی سے رکھ سکتے ہیں۔",
-      disableBeacon: true,
+      skipBeacon: true,
     },
     {
       target: ".tour-udhar-card",
@@ -50,7 +50,7 @@ export default function TourGuide() {
       callback={handleJoyrideCallback}
       disableScrolling
       disableOverlayClose
-      disableBeacon={true}
+      skipBeacon={true}
       styles={{
         options: {
           primaryColor: "#1abc9c", 
