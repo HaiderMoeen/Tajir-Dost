@@ -213,7 +213,7 @@ function CatalogueSheet({ onClose }: { onClose: () => void }) {
               </button>
             </div>
 
-            <p className="text-lg font-black text-gray-900 mb-3">Kitni ({selected.unit})?</p>
+            <label className="block text-sm font-black text-gray-700 mb-2">Kitni ({selected.unit})?</label>
             <div className="flex items-center gap-4 mb-8">
               <button onClick={() => setStock(s => Math.max(0, s - 1))} className="w-12 h-12 rounded-full bg-red-100 text-red-600 text-2xl font-black flex items-center justify-center">−</button>
               <span className="text-3xl font-black text-gray-900 w-12 text-center tabular-nums">{stock}</span>
