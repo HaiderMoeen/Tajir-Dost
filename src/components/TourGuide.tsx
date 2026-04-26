@@ -19,16 +19,16 @@ export default function TourGuide() {
   const steps: Step[] = [
     {
       target: ".tour-hisaab-btn",
-      content: language === "en" ? "Tap here to quickly log today's earnings and expenses." : "Yahan click kar ke aaj ki kamai aur kharcha darj karein.",
+      content: language === "en" ? "Yahan se aap rozana ki kamai aur kharchay ka hisaab asani se rakh sakte hain." : "یہاں سے آپ روزانہ کی کمائی اور خرچوں کا حساب آسانی سے رکھ سکتے ہیں۔",
       disableBeacon: true,
     },
     {
       target: ".tour-udhar-card",
-      content: language === "en" ? "See how much Udhar is pending. Tap to view details and send WhatsApp reminders." : "Dekhein kitna Udhar baqi hai. Tafseel dekhne aur WhatsApp par reminder bhejne ke liye yahan dabayein.",
+      content: language === "en" ? "Idhar se aap apna saara pending Udhaar dekh sakte hain aur gahakon ko reminder bhej sakte hain." : "ادھر سے آپ اپنا سارا ادھار دیکھ سکتے ہیں اور گاہکوں کو یاد دہانی بھیج سکتے ہیں۔",
     },
     {
       target: ".tour-tajir-widget",
-      content: language === "en" ? "Items low on stock appear here. 1-click reorder directly from Tajir!" : "Jo items khatam hone walay hain wo yahan nazar ayenge. 1-click se Tajir se mangwayein!",
+      content: language === "en" ? "Idhar se jo samaan khatam ho raha hai, usay dobara Tajir se asani se mangwa sakte hain." : "ادھر سے جو سامان ختم ہو رہا ہے، اسے دوبارہ تاجر سے آسانی سے منگوا سکتے ہیں۔",
     }
   ];
 
@@ -48,9 +48,12 @@ export default function TourGuide() {
       showProgress
       showSkipButton
       callback={handleJoyrideCallback}
+      disableScrolling
+      disableOverlayClose
+      disableBeacon={true}
       styles={{
         options: {
-          primaryColor: "#059669", // Emerald 600
+          primaryColor: "#1abc9c", 
           zIndex: 1000,
         },
       }}

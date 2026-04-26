@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, MessageCircle, CheckCircle2, User, Phone, DollarSign } from "lucide-react";
+import { Plus, MessageCircle, CheckCircle2, User, Phone, DollarSign, CalendarDays } from "lucide-react";
 import { useAppContext } from "@/context/AppContext";
 import toast from "react-hot-toast";
 
 export default function UdharPage() {
-  const { udharList, markUdharPaid, addUdhar, language } = useAppContext();
+  const { udharList, markUdharPaid, addUdhar, language, profile } = useAppContext();
   const [showModal, setShowModal] = useState(false);
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
@@ -19,23 +19,25 @@ export default function UdharPage() {
   const t = {
     title: language === "en" ? "Udhar Book" : "Udhar Khata",
     empty: language === "en" ? "No pending Udhar. Great job!" : "Koi Udhar baqi nahi. Zabardast!",
-    daysOverdue: (days: number) => language === "en" ? `${days} days overdue` : `${days} din oopar`,
+    dateTaken: (days: number) => {
+      const d = new Date();
+      d.setDate(d.getDate() - days);
+      return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    },
     remind: language === "en" ? "Remind" : "Yaad Dilayein",
     markPaid: language === "en" ? "Paid" : "Wasool",
-    addNew: language === "en" ? "Add New Udhar" : "Naya Udhar Likhain",
+    addNew: language === "en" ? "New Udhaar" : "Naya Udhar",
     name: language === "en" ? "Customer Name" : "Gahak Ka Naam",
     phone: language === "en" ? "Phone Number" : "Phone Number",
     amount: language === "en" ? "Amount (Rs)" : "Raqam (Rs)",
     save: language === "en" ? "Save Udhar" : "Mahfooz Karein",
     cancel: language === "en" ? "Cancel" : "Wapis",
-    message: (name: string, amount: number) => language === "en" 
-      ? `Assalam-o-Alaikum ${name}, aap ka Bismillah Store par Rs. ${amount} ka udhar pending hai. Barae meherbani jald clear kar dein.`
-      : `Assalam-o-Alaikum ${name}, aap ka Bismillah Store par Rs. ${amount} ka udhar pending hai. Barae meherbani jald clear kar dein.`
+    message: (name: string, amount: number) => 
+      `Assalam-o-Alaikum ${name}, aap ka ${profile.storeName} par Rs. ${amount} ka udhaar baqi hai. Barae meherbani jald clear kar dein. Aap humein ${profile.bankName} (${profile.accountNumber}) par bhi transfer kar sakte hain.`
   };
 
   const handleSendReminder = (name: string, phone: string, amount: number) => {
     const text = encodeURIComponent(t.message(name, amount));
-    // For MVP, we assume the phone is in Pakistan format starting with 0, convert to 92
     const formattedPhone = phone.startsWith("0") ? "92" + phone.slice(1) : phone;
     window.open(`https://wa.me/${formattedPhone}?text=${text}`, "_blank");
   };
@@ -59,11 +61,23 @@ export default function UdharPage() {
   };
 
   return (
-    <main className="flex-1 overflow-y-auto bg-gray-50 p-4 pb-24 md:p-8 relative min-h-screen">
-      <div className="max-w-4xl mx-auto">
-      <header className="mb-6 pt-2 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-      </header>
+    <main className="flex-1 bg-[#f0fbf9] min-h-screen flex flex-col relative pb-20 md:pb-6">
+      <div className="w-full max-w-5xl mx-auto flex flex-col min-h-screen">
+      <div className="pt-6 px-6 pb-6 bg-gradient-to-r from-yellow-500 to-orange-600 text-white rounded-b-3xl shadow-md flex justify-between items-center mb-6">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold drop-shadow-md">Udhaar</h1>
+            <h1 className="text-3xl font-bold drop-shadow-md" style={{ fontFamily: 'var(--font-urdu)' }}>(ادھار)</h1>
+          </div>
+        </div>
+        <button onClick={() => setShowModal(true)} className="bg-white text-orange-600 px-4 py-2 rounded-2xl shadow-md active:scale-95 transition-all flex items-center gap-2">
+          <span className="font-bold text-sm hidden md:block">+ {t.addNew}</span>
+          <span className="font-bold text-lg md:text-xl" style={{ fontFamily: 'var(--font-urdu)' }}>
+            <span className="md:hidden">نیا ادھار</span>
+            <span className="hidden md:inline">(نیا ادھار)</span>
+          </span>
+        </button>
+      </div>
 
       {udharList.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 text-gray-400">
@@ -71,23 +85,27 @@ export default function UdharPage() {
           <p className="text-lg font-medium">{t.empty}</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="p-4 md:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {udharList.map((item) => (
-            <div key={item.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+            <div key={item.id} className="bg-gradient-to-br from-yellow-500 to-orange-600 shadow-lg shadow-orange-500/20 rounded-3xl p-5 flex flex-col justify-between min-h-[160px] transition-all group hover:scale-[1.02]">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
-                  <p className="text-sm text-rose-500 font-medium">{t.daysOverdue(item.daysOverdue)}</p>
+                  <h3 className="text-xl font-bold text-white drop-shadow-md leading-tight">{item.name}</h3>
+                  <p className="text-sm text-yellow-100 font-medium drop-shadow-md mt-0.5">{item.phone}</p>
+                  <div className="flex items-center gap-1.5 text-sm text-yellow-50 font-bold mt-2 drop-shadow-md">
+                    <CalendarDays size={14} />
+                    <span>{t.dateTaken(item.daysOverdue)}</span>
+                  </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-xl font-bold text-gray-900">{formatCurrency(item.amount)}</span>
+                  <span className="text-2xl font-black text-white drop-shadow-md">{formatCurrency(item.amount)}</span>
                 </div>
               </div>
               
-              <div className="flex gap-2 border-t border-gray-50 pt-3 mt-2">
+              <div className="flex gap-2 pt-2 mt-auto">
                 <button
                   onClick={() => handleSendReminder(item.name, item.phone, item.amount)}
-                  className="flex-1 bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 py-2.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors"
+                  className="flex-1 bg-white text-[#25D366] hover:bg-gray-50 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-sm"
                 >
                   <MessageCircle size={18} />
                   {t.remind}
@@ -97,7 +115,7 @@ export default function UdharPage() {
                     markUdharPaid(item.id);
                     toast.success(language === "en" ? "Udhar cleared" : "Udhar wasool ho gaya");
                   }}
-                  className="flex-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 py-2.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors"
+                  className="flex-1 bg-white text-orange-600 hover:bg-orange-50 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-sm"
                 >
                   <CheckCircle2 size={18} />
                   {t.markPaid}
@@ -108,13 +126,7 @@ export default function UdharPage() {
         </div>
       )}
 
-      {/* FAB */}
-      <button
-        onClick={() => setShowModal(true)}
-        className="fixed bottom-24 right-4 sm:right-[calc(50%-13rem)] w-14 h-14 bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-xl shadow-emerald-600/30 hover:bg-emerald-700 active:scale-95 transition-all z-40"
-      >
-        <Plus size={28} />
-      </button>
+
 
       {/* Add Udhar Modal */}
       {showModal && (
@@ -177,11 +189,11 @@ export default function UdharPage() {
                   {t.cancel}
                 </button>
                 <button
-                  type="submit"
-                  className="flex-1 py-3 px-4 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-600/20"
-                >
-                  {t.save}
-                </button>
+              type="submit"
+              className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-600 text-white font-bold text-lg rounded-2xl shadow-lg active:scale-95 transition-all mt-4"
+            >
+              {t.save}
+            </button>
               </div>
             </form>
           </div>
