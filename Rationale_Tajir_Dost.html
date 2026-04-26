@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tajir Dost - Product Rationale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            color: #2d3436;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            background: #fff;
+        }
+        .header {
+            border-bottom: 4px solid #1abc9c;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        h1 {
+            margin: 0;
+            font-size: 42px;
+            font-weight: 900;
+            color: #1abc9c;
+            letter-spacing: -1px;
+        }
+        .meta {
+            text-align: right;
+            font-weight: 700;
+            color: #636e72;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+        h2 {
+            font-size: 24px;
+            color: #2d3436;
+            margin-top: 30px;
+            border-left: 5px solid #1abc9c;
+            padding-left: 15px;
+        }
+        p {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #4b4b4b;
+        }
+        .highlight {
+            background: #f0fbf9;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 1px solid #d1f2eb;
+        }
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .screenshot-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .screenshot-item img {
+            width: 100%;
+            display: block;
+        }
+        .screenshot-caption {
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            background: #fff;
+            color: #636e72;
+        }
+        .urdu {
+            font-family: 'Noto Nastaliq Urdu', serif;
+            line-height: 2;
+        }
+        footer {
+            margin-top: 50px;
+            font-size: 12px;
+            color: #b2bec3;
+            text-align: center;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        @media print {
+            body { padding: 0; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>Tajir Dost</h1>
+            <p style="margin:0; font-weight:700;">Software Engineer Take-Home Assignment 2026</p>
+        </div>
+        <div class="meta">
+            Rationale Document<br>
+            April 2026
+        </div>
+    </div>
+
+    <h2>1. What did you build?</h2>
+    <p>
+        I built <strong>Tajir Dost</strong> (The Trader's Friend), a mobile-first digital assistant designed for small-scale kiryana store owners in Pakistan. Unlike complex POS systems, Tajir Dost focuses on the "unspoken" workflow of the shopkeeper: tracking daily profit, managing the high friction of credit (Udhaar), and reducing the exhaustion of manual inventory checks.
+    </p>
+
+    <div class="screenshot-grid">
+        <div class="screenshot-item">
+            <img src="public/rationale/dashboard.png" alt="Dashboard">
+            <div class="screenshot-caption">Home Dashboard: Visual Status & "Aaj ki Kamai"</div>
+        </div>
+        <div class="screenshot-item">
+            <img src="public/rationale/udhar.png" alt="Udhar Manager">
+            <div class="screenshot-caption">Udhaar Manager: 1-Click WhatsApp Reminders</div>
+        </div>
+    </div>
+
+    <h2>2. What problem does it solve?</h2>
+    <div class="highlight">
+        <p><strong>The "Time Theft" of Inventory:</strong> Store owners like Manzoor Ali spend up to 4 hours physically auditing shelves. Tajir Dost uses a visual shelf system that alerts the owner the moment an item is running low, allowing them to restock proactively with a single tap.</p>
+        <p><strong>The "Social Friction" of Credit:</strong> Recovery is the most painful part of the business. By automating reminders via WhatsApp and embedding the shop's bank details (Easypaisa/JazzCash), the app removes the awkwardness of asking for money face-to-face.</p>
+        <p><strong>The "Zero-Tracking" Blindness:</strong> Many owners fly blind financially. The "Aaj ki Kamai" (Today's Earnings) flow is designed to be so fast and bilingual that it takes less than 10 seconds a day, bringing financial visibility to those who currently track nothing.</p>
+    </div>
+
+    <h2>3. What convinced you this is a real problem?</h2>
+    <p>
+        My interviews with 5 local shopkeepers in Lahore were eye-opening. The most convincing moment was when <strong>Manzoor Ali</strong> described his 4-hour physical stock checks as "exhausting." It wasn't just a chore; it was time stolen from his family. 
+    </p>
+    <p>
+        Similarly, <strong>Muhammad Ali</strong> told me he completely stopped offering Udhaar because recovery was "too frustrating." This was a direct loss of revenue for him. Seeing <strong>Moazzam</strong> manually write down physical home addresses just to track small debts proved that the current "manual system" is a logistical nightmare. These aren't abstract business problems; they are daily stresses that affect their quality of life.
+    </p>
+
+    <div class="screenshot-grid">
+        <div class="screenshot-item" style="grid-column: span 2;">
+            <img src="public/rationale/inventory.png" alt="Inventory Shelves">
+            <div class="screenshot-caption">Visual Shelves: A digital mirror of the physical store</div>
+        </div>
+    </div>
+
+    <footer>
+        Tajir Dost - Solving real problems for the backbone of Lahore's economy.
+    </footer>
+</body>
+</html>
