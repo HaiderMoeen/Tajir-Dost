@@ -47,15 +47,13 @@ export default function TourGuide() {
       continuous
       showProgress
       showSkipButton
-      callback={handleJoyrideCallback}
+      onEvent={handleJoyrideCallback}
       disableScrolling
       disableOverlayClose
       skipBeacon={true}
-      styles={{
-        options: {
-          primaryColor: "#1abc9c", 
-          zIndex: 1000,
-        },
+      options={{
+        primaryColor: "#1abc9c",
+        zIndex: 1000,
       }}
       locale={{
         last: language === "en" ? "Done" : "Khatam",
