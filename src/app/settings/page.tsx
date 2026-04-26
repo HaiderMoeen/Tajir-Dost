@@ -36,7 +36,8 @@ export default function SettingsPage() {
   };
 
   return (
-    <main className="flex-1 overflow-y-auto bg-gray-50 p-4 pb-24">
+    <main className="flex-1 overflow-y-auto bg-gray-50 p-4 pb-24 md:p-8">
+      <div className="max-w-3xl mx-auto">
       <header className="mb-6 pt-2">
         <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
       </header>
@@ -121,7 +122,7 @@ export default function SettingsPage() {
         <LogOut size={20} />
         {t.logout}
       </button>
-
+      </div>
     </main>
   );
 }

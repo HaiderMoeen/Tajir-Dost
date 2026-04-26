@@ -3,14 +3,14 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { PlusCircle, ShoppingCart, TrendingUp, AlertTriangle } from "lucide-react";
+import { PlusCircle, ShoppingCart, TrendingUp, Banknote, Store } from "lucide-react";
 import { useAppContext } from "@/context/AppContext";
 import toast from "react-hot-toast";
 import TourGuide from "@/components/TourGuide";
 
 export default function Home() {
   const router = useRouter();
-  const { earnings, udharList, inventory, restockItem, language } = useAppContext();
+  const { earnings, expenses, udharList, inventory, restockItem, language } = useAppContext();
 
   const totalPendingUdhar = useMemo(() => {
     return udharList.reduce((sum, item) => sum + item.amount, 0);
@@ -24,15 +24,21 @@ export default function Home() {
     return new Intl.NumberFormat("en-PK", { style: "currency", currency: "PKR", maximumFractionDigits: 0 }).format(amount);
   };
 
+  const munafa = earnings - expenses;
+
   const t = {
     greeting: language === "en" ? "Hello, Manzoor Bhai 👋" : "Assalam o Alaikum, Manzoor Bhai 👋",
     store: "Bismillah General Store",
-    startHisaab: language === "en" ? "Start Daily Hisaab" : "Aaj ka Hisaab Karein",
-    todaySales: language === "en" ? "Today's Sales" : "Aaj ki Sales",
-    pendingUdhar: language === "en" ? "Total Pending Udhar" : "Kul Baqi Udhar",
-    needsRestocking: language === "en" ? "Needs Restocking" : "Samaan Mangwayein",
-    reorder: language === "en" ? "Reorder on Tajir" : "Tajir se Mangwayein",
-    stockStatus: (stock: number) => language === "en" ? `Only ${stock} left in stock` : `Sirf ${stock} reh gaye`,
+    startHisaab: "Aaj ka Hisaab karte!",
+    startHisaabUrdu: "(آج کا حساب کرتے ہیں!)",
+    todaySales: "Aaj ka Munafa",
+    todaySalesUrdu: "(آج کا منافع)",
+    pendingUdhar: "Udhaar",
+    pendingUdharUrdu: "(ادھار)",
+    needsRestocking: "Samaan Mangwaiye",
+    needsRestockingUrdu: "(سامان منگوائیے)",
+    reorder: "Tajir se Mangwayein (تاجر سے منگوائیں)",
+    stockStatus: (stock: number) => `Sirf ${stock} reh gaye (صرف ${stock} رہ گئے)`,
   };
 
   const handleRestock = (id: string) => {
@@ -48,7 +54,8 @@ export default function Home() {
   };
 
   return (
-    <main className="flex-1 overflow-y-auto bg-gray-50 p-4 pb-20">
+    <main className="flex-1 overflow-y-auto bg-gray-50 p-4 pb-24 md:p-8">
+      <div className="max-w-5xl mx-auto">
       <TourGuide />
 
       {/* Header */}
@@ -57,69 +64,103 @@ export default function Home() {
         <p className="text-gray-500 mt-1">{t.greeting}</p>
       </header>
 
-      {/* Primary CTA */}
-      <div className="mb-8 tour-hisaab-btn">
+      {/* Consolidated Top Grid: Hisaab CTA, Munafa, Udhar */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+        
+        {/* Primary CTA as a Card */}
         <Link
           href="/hisaab"
-          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white p-4 rounded-2xl flex items-center justify-between shadow-lg shadow-emerald-600/20 active:scale-95 transition-transform"
+          className="p-6 rounded-3xl bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-600 hover:to-emerald-800 text-white flex flex-col justify-between min-h-[140px] shadow-xl shadow-emerald-600/30 active:scale-[0.98] transition-all tour-hisaab-btn"
         >
-          <div className="flex items-center gap-3">
-            <div className="bg-emerald-500/30 p-2 rounded-xl">
-              <PlusCircle className="text-white" size={28} />
+          <div className="flex items-center gap-2">
+            <PlusCircle size={20} />
+            <span className="text-sm font-bold leading-tight uppercase tracking-wider text-emerald-100">Naya Hisaab</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xl md:text-2xl font-black leading-tight">{t.startHisaab}</span>
+            <span className="text-xl font-bold mt-2 text-emerald-100" style={{ fontFamily: 'var(--font-urdu)' }}>{t.startHisaabUrdu}</span>
+          </div>
+        </Link>
+
+        {/* Munafa Card */}
+        <Link 
+          href="/hisaab" 
+          className={`p-6 rounded-3xl shadow-md border flex flex-col justify-between min-h-[140px] active:scale-[0.98] transition-all ${munafa >= 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`}
+        >
+          <div className={`flex items-start gap-2 ${munafa >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
+            <TrendingUp size={20} className="mt-0.5" />
+            <div className="flex flex-row flex-wrap items-center gap-x-2">
+              <span className="text-sm font-bold leading-tight">{t.todaySales}</span>
+              <span className="text-xl font-bold leading-tight" style={{ fontFamily: 'var(--font-urdu)' }}>{t.todaySalesUrdu}</span>
             </div>
-            <span className="text-xl font-semibold tracking-wide">{t.startHisaab}</span>
           </div>
-        </Link>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 gap-4 mb-8">
-        <Link href="/hisaab" className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-2 active:bg-gray-50">
-          <div className="flex items-center gap-2 text-emerald-600">
-            <TrendingUp size={18} />
-            <span className="text-sm font-medium">{t.todaySales}</span>
-          </div>
-          <span className="text-xl font-bold text-gray-900">{formatCurrency(earnings)}</span>
+          <span className={`text-2xl font-black ${munafa >= 0 ? 'text-emerald-800' : 'text-red-800'}`}>{formatCurrency(munafa)}</span>
         </Link>
 
-        <Link href="/udhar" className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-2 active:bg-gray-50 tour-udhar-card">
-          <div className="flex items-center gap-2 text-rose-500">
-            <AlertTriangle size={18} />
-            <span className="text-sm font-medium">{t.pendingUdhar}</span>
+        {/* Udhar Card */}
+        <Link 
+          href="/udhar" 
+          className="bg-yellow-50 p-6 rounded-3xl shadow-md border border-yellow-200 flex flex-col justify-between min-h-[140px] active:scale-[0.98] transition-all tour-udhar-card"
+        >
+          <div className="flex items-start gap-2 text-yellow-700">
+            <Banknote size={20} className="mt-0.5" />
+            <div className="flex flex-row flex-wrap items-center gap-x-2">
+              <span className="text-sm font-bold leading-tight">{t.pendingUdhar}</span>
+              <span className="text-xl font-bold leading-tight" style={{ fontFamily: 'var(--font-urdu)' }}>{t.pendingUdharUrdu}</span>
+            </div>
           </div>
-          <span className="text-xl font-bold text-gray-900">{formatCurrency(totalPendingUdhar)}</span>
+          <span className="text-2xl font-black text-yellow-900">{formatCurrency(totalPendingUdhar)}</span>
         </Link>
+
       </div>
 
       {/* Tajir Integration Widget */}
       {lowStockItems.length > 0 && (
         <section className="mb-6 tour-tajir-widget">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900">{t.needsRestocking}</h2>
-            <div className="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded-full">
-              Tajir Integration
+          <div className="flex flex-col mb-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900">{t.needsRestocking}</h2>
+              <div className="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded-full">
+                Tajir Integration
+              </div>
             </div>
+            <h2 className="text-2xl font-bold text-gray-900 mt-4" style={{ fontFamily: 'var(--font-urdu)' }}>{t.needsRestockingUrdu}</h2>
           </div>
 
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {lowStockItems.map((item) => (
-              <div key={item.id} className="bg-white p-4 rounded-xl shadow-sm border border-orange-100 flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold text-gray-800">{item.name}</h3>
-                  <p className="text-sm text-orange-500 font-medium">{t.stockStatus(item.stock)}</p>
+              <div key={item.id} className="bg-white p-5 rounded-3xl shadow-md border border-orange-100 flex flex-col h-full min-h-[300px]">
+                <h3 className="font-semibold text-gray-800 text-lg leading-tight text-center">{item.name}</h3>
+                <h4 className="font-bold text-gray-600 text-xl mt-1 text-center" style={{ fontFamily: 'var(--font-urdu)' }}>
+                  {item.id === 'i1' ? 'شان بریانی مصالحہ' : item.id === 'i2' ? 'نیسلے ملک پیک 1 لیٹر' : ''}
+                </h4>
+                
+                <img 
+                  src={item.id === 'i1' ? '/shan_biryani.png' : item.id === 'i2' ? '/milkpak.png' : '/file.svg'} 
+                  alt={item.name} 
+                  className="w-full h-40 object-contain my-4 mix-blend-multiply"
+                />
+
+                <p className="text-xl text-orange-500 font-bold mb-4 text-center" style={{ fontFamily: 'var(--font-urdu)' }}>
+                  {t.stockStatus(item.stock)}
+                </p>
+
+                <div className="mt-auto">
+                  <button
+                    onClick={() => handleRestock(item.id)}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl flex items-center justify-center gap-3 transition-colors active:scale-95 shadow-lg shadow-blue-600/20"
+                  >
+                    <ShoppingCart size={22} />
+                    <div className="w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+                    <Store size={22} />
+                  </button>
                 </div>
-                <button
-                  onClick={() => handleRestock(item.id)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors active:scale-95"
-                >
-                  <ShoppingCart size={16} />
-                  <span className="hidden sm:inline">{t.reorder}</span>
-                </button>
               </div>
             ))}
           </div>
         </section>
       )}
+      </div>
     </main>
   );
 }

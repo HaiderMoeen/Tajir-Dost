@@ -59,7 +59,8 @@ export default function UdharPage() {
   };
 
   return (
-    <main className="flex-1 overflow-y-auto bg-gray-50 p-4 pb-24 relative min-h-screen">
+    <main className="flex-1 overflow-y-auto bg-gray-50 p-4 pb-24 md:p-8 relative min-h-screen">
+      <div className="max-w-4xl mx-auto">
       <header className="mb-6 pt-2 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
       </header>
@@ -70,7 +71,7 @@ export default function UdharPage() {
           <p className="text-lg font-medium">{t.empty}</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {udharList.map((item) => (
             <div key={item.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
               <div className="flex justify-between items-start mb-4">
@@ -186,6 +187,7 @@ export default function UdharPage() {
           </div>
         </div>
       )}
+      </div>
     </main>
   );
 }
