@@ -44,7 +44,8 @@ export default function HisaabPage() {
   };
 
   return (
-    <main className="flex-1 bg-white min-h-screen flex flex-col relative pb-20">
+    <main className="flex-1 bg-emerald-50 min-h-screen flex flex-col relative pb-20">
+      <div className="w-full max-w-3xl mx-auto flex flex-col min-h-screen">
       {/* Progress Header */}
       <div className="pt-6 px-4 pb-4 bg-emerald-600 text-white rounded-b-3xl shadow-md">
         <h1 className="text-2xl font-bold text-center mb-6">{t.title}</h1>
@@ -81,7 +82,7 @@ export default function HisaabPage() {
                 type="number"
                 value={newEarnings}
                 onChange={(e) => setNewEarnings(e.target.value)}
-                className="w-full pl-20 pr-6 py-6 text-4xl font-bold text-gray-900 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:ring-0 focus:border-emerald-500 outline-none text-center transition-all shadow-sm"
+                className="w-full pl-20 pr-6 py-6 text-4xl font-bold text-gray-900 bg-white border-2 border-emerald-100 rounded-2xl focus:ring-0 focus:border-emerald-500 outline-none text-center transition-all shadow-sm"
               />
             </div>
           </div>
@@ -103,7 +104,7 @@ export default function HisaabPage() {
                 type="number"
                 value={newExpenses}
                 onChange={(e) => setNewExpenses(e.target.value)}
-                className="w-full pl-20 pr-6 py-6 text-4xl font-bold text-gray-900 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:ring-0 focus:border-rose-500 outline-none text-center transition-all shadow-sm"
+                className="w-full pl-20 pr-6 py-6 text-4xl font-bold text-gray-900 bg-white border-2 border-emerald-100 rounded-2xl focus:ring-0 focus:border-rose-500 outline-none text-center transition-all shadow-sm"
               />
             </div>
 
@@ -128,7 +129,7 @@ export default function HisaabPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.step3}</h2>
             </div>
             
-            <div className="bg-gray-50 rounded-2xl p-6 space-y-4 border border-gray-100">
+            <div className="bg-white rounded-2xl p-6 space-y-4 border border-emerald-100 shadow-sm">
               <div className="flex justify-between items-center pb-4 border-b border-gray-200">
                 <span className="text-gray-500 font-medium">{t.step1}</span>
                 <span className="text-xl font-bold text-emerald-600">+{formatCurrency(parseInt(newEarnings) || 0)}</span>
@@ -154,7 +155,7 @@ export default function HisaabPage() {
         {step > 1 && (
           <button
             onClick={handleBack}
-            className="flex-1 py-4 bg-gray-100 text-gray-700 font-bold rounded-2xl flex justify-center items-center gap-2 active:bg-gray-200"
+            className="flex-1 py-4 bg-emerald-100 text-emerald-800 font-bold rounded-2xl flex justify-center items-center gap-2 active:bg-emerald-200"
           >
             <ArrowLeft size={20} />
             {t.back}
@@ -178,6 +179,7 @@ export default function HisaabPage() {
             {t.save}
           </button>
         )}
+      </div>
       </div>
     </main>
   );
